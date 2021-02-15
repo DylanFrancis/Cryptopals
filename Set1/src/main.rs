@@ -1,3 +1,6 @@
+#![feature(type_ascription)]
+mod base64;
+
 fn main() {
-    println!("Hello, world!");
+    base64::run();
 }
