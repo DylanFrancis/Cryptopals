@@ -36,7 +36,8 @@ fn main() {
 
 fn decode(to_decode: &[String], map: &HashMap<char, u8>) {
     for word in to_decode {
-
+        let decoded = base64decode::run(&word, &map);
+        println!("{} -> {}", word, decoded);
     }
 }
 
