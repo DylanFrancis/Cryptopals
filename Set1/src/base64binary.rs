@@ -1,16 +1,12 @@
 use std::collections::HashMap;
-use std::fs::File;
-use std::io::{BufReader, BufRead};
 
-pub fn run() {
-    let s = "abcasasqweqaea";
-    let encoded = encode_to_base64(s);
-    println!("{} -> {}", s, encoded);
+pub fn run(word: &str, map: &HashMap<u8, char>) -> String {
+    encode_to_base64(word, &map)
 }
 
-pub fn encode_to_base64(to_base64: &str) -> String {
+pub fn encode_to_base64(to_base64: &str, map: &HashMap<u8, char>) -> String {
     let main = concat_binary(to_base64);
-    let mut encoded = to_string(main);
+    let mut encoded = to_string(main, &map);
     encoded = padding(encoded, to_base64.len());
 
     encoded
@@ -29,11 +25,10 @@ fn padding(mut encoded: String, len: usize) -> String {
     encoded
 }
 
-fn to_string(main: Vec<u8>) -> String {
+fn to_string(main: Vec<u8>, map: &HashMap<u8, char>) -> String {
     let mut count: usize = 0;
     let mut index: [u8; 6] = [0; 6];
     let mut encode: String = String::new();
-    let map= indices();
 
     for bit in &main {
         // println!("{}", bit);
@@ -41,7 +36,6 @@ fn to_string(main: Vec<u8>) -> String {
 
         if count == 5 {
             let i = to_decimal(index);
-            println!("{:?} -> {}", index, i);
             encode.push(*map.get(&i).unwrap());
 
             count = 0;
@@ -55,9 +49,7 @@ fn to_string(main: Vec<u8>) -> String {
     }
 
     if count != 0 {
-        println!("{}", count);
         let i = to_decimal(index);
-        println!("{:?} -> {}", index, i);
         encode.push(*map.get(&i).unwrap());
     }
 
@@ -84,12 +76,10 @@ fn concat_binary(to_binary: &str) -> Vec<u8> {
     for character_byte in to_binary.as_bytes() {
         let character_binary = binary(&character_byte);
         for num in &character_binary {
-            print!("{}", num);
             main.push(*num);
         }
     }
 
-    println!("\n");
     main
 }
 
@@ -105,24 +95,4 @@ fn binary(num: &u8) -> [u8; 8] {
     }
 
     arr
-}
-
-
-fn indices() -> HashMap<u8, char> {
-    let file = File::open("indices.txt").unwrap();
-    let file_reader = BufReader::new(file);
-
-    let mut indices = HashMap::new();
-
-    for line_result in file_reader.lines() {
-        let line = line_result.unwrap();
-        let mut split = line.split(" ");
-
-        let key = split.next().unwrap().parse::<u8>().unwrap();
-        let value = split.next().unwrap().as_bytes()[0] as char;
-
-        indices.insert(key, value);
-    }
-
-    indices
 }
