@@ -11,7 +11,9 @@ mod base64binary;
 mod base64decode;
 
 fn main() {
-    let map = indices();
+    let indices = indices();
+    let bit_to_character_map = indices.0;
+    let character_to_bit_map = indices.1;
 
     let args: Vec<String> = env::args().collect();
 
@@ -19,10 +21,10 @@ fn main() {
     if args.len() > 2 {
         match args.get(1).unwrap().as_str() {
             "encode" => {
-                encode(args.split_at(2).1, &map);
+                encode(args.split_at(2).1, &bit_to_character_map);
             },
             "decode" => {
-                decode(args.split_at(2).1, &map);
+                decode(args.split_at(2).1, &character_to_bit_map);
             },
             &_ => {}
         }
@@ -32,8 +34,9 @@ fn main() {
     }
 }
 
-fn decode(to_decode: &[String], map: &HashMap<u8, char>) {
+fn decode(to_decode: &[String], map: &HashMap<char, u8>) {
     for word in to_decode {
+
     }
 }
 
@@ -44,11 +47,12 @@ fn encode(to_encode: &[String], map: &HashMap<u8, char>) {
     }
 }
 
-fn indices() -> HashMap<u8, char> {
+fn indices() -> (HashMap<u8, char>, HashMap<char, u8>) {
     let file = File::open("indices.txt").unwrap();
     let file_reader = BufReader::new(file);
 
-    let mut indices = HashMap::new();
+    let mut bit_to_character = HashMap::new();
+    let mut character_to_bit = HashMap::new();
 
     for line_result in file_reader.lines() {
         let line = line_result.unwrap();
@@ -57,8 +61,9 @@ fn indices() -> HashMap<u8, char> {
         let key = split.next().unwrap().parse::<u8>().unwrap();
         let value = split.next().unwrap().as_bytes()[0] as char;
 
-        indices.insert(key, value);
+        bit_to_character.insert(key, value);
+        character_to_bit.insert(value, key);
     }
 
-    indices
+    (bit_to_character, character_to_bit)
 }
