@@ -9,6 +9,7 @@ use std::process::exit;
 mod base64;
 mod base64binary;
 mod base64decode;
+mod hex;
 
 fn main() {
     let indices = indices();
@@ -26,11 +27,22 @@ fn main() {
             "decode" => {
                 decode(args.split_at(2).1, &character_to_bit_map);
             },
+            "hex-b64" => {
+                hex_to_b64(args.split_at(2).1, &bit_to_character_map)
+            },
             &_ => {}
         }
     }
     else {
         println!("too few arguments");
+    }
+}
+
+fn hex_to_b64(to_decode: &[String], map: &HashMap<u8, char>) {
+    for word in to_decode {
+        let bits = hex::hex_to_bits(word);
+        let b64 = base64binary::encode_bits(&bits, map);
+        println!("{}", b64);
     }
 }
 
@@ -43,7 +55,7 @@ fn decode(to_decode: &[String], map: &HashMap<char, u8>) {
 
 fn encode(to_encode: &[String], map: &HashMap<u8, char>) {
     for word in to_encode {
-        let encode = base64binary::run(word.as_str(), &map);
+        let encode = base64binary::encode_string(word.as_str(), &map);
         println!("{} -> {}", word, encode);
     }
 }

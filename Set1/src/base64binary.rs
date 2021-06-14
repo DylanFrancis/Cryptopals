@@ -1,12 +1,12 @@
 use std::collections::HashMap;
 
-pub fn run(word: &str, map: &HashMap<u8, char>) -> String {
-    encode_to_base64(word, &map)
+pub fn encode_string(to_base64: &str, map: &HashMap<u8, char>) -> String {
+    let main = concat_binary(to_base64);
+    encode_bits(&main, map)
 }
 
-pub fn encode_to_base64(to_base64: &str, map: &HashMap<u8, char>) -> String {
-    let main = concat_binary(to_base64);
-    let mut encoded = to_string(main, &map);
+pub fn encode_bits(to_base64: &Vec<u8>, map: &HashMap<u8, char>) -> String {
+    let mut encoded = to_string(&to_base64, map);
     encoded = padding(encoded, to_base64.len());
 
     encoded
@@ -25,12 +25,12 @@ fn padding(mut encoded: String, len: usize) -> String {
     encoded
 }
 
-fn to_string(main: Vec<u8>, map: &HashMap<u8, char>) -> String {
+fn to_string(main: &Vec<u8>, map: &HashMap<u8, char>) -> String {
     let mut count: usize = 0;
     let mut index: [u8; 6] = [0; 6];
     let mut encode: String = String::new();
 
-    for bit in &main {
+    for bit in main {
         // println!("{}", bit);
         index[count] = *bit;
 
