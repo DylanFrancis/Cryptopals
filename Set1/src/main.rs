@@ -16,7 +16,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     println!("{:?}", args);
-    if args.len() > 3 {
+    if args.len() > 2 {
         match args.get(1).unwrap().as_str() {
             "encode" => {
                 encode(args.split_at(2).1, &map);
