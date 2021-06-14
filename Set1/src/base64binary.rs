@@ -1,17 +1,32 @@
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{BufReader, BufRead};
-// use byte::*;
 
 pub fn run() {
-    let s = "abcasasqweqae";
+    let s = "abcasasqweqaea";
     let encoded = encode_to_base64(s);
     println!("{} -> {}", s, encoded);
 }
 
 pub fn encode_to_base64(to_base64: &str) -> String {
     let main = concat_binary(to_base64);
-    to_string(main)
+    let mut encoded = to_string(main);
+    encoded = padding(encoded, to_base64.len());
+
+    encoded
+}
+
+fn padding(mut encoded: String, len: usize) -> String {
+    match (len * 8) % 24 {
+        8 => {
+            encoded.push('=');
+            encoded.push('=');
+        },
+        16 => encoded.push('='),
+        _ => {}
+    }
+
+    encoded
 }
 
 fn to_string(main: Vec<u8>) -> String {
@@ -20,9 +35,9 @@ fn to_string(main: Vec<u8>) -> String {
     let mut encode: String = String::new();
     let map= indices();
 
-    for bit in main {
+    for bit in &main {
         // println!("{}", bit);
-        index[count] = bit;
+        index[count] = *bit;
 
         if count == 5 {
             let i = to_decimal(index);
