@@ -38,10 +38,11 @@ fn to_string(main: Vec<u8>, map: &HashMap<u8, char>) -> String {
             let i = to_decimal(index);
             encode.push(*map.get(&i).unwrap());
 
-            count = 0;
+            // reset for next 8 bits
             for x in 0..6 {
                 index[x] = 0;
             }
+            count = 0;
         }
         else {
             count += 1;
@@ -56,7 +57,7 @@ fn to_string(main: Vec<u8>, map: &HashMap<u8, char>) -> String {
     encode
 }
 
-fn to_decimal(arr: [u8; 6]) -> u8{
+fn to_decimal(arr: [u8; 6]) -> u8 {
     let mut num: u8 = 0;
     let mut count: u32 = 6;
 
