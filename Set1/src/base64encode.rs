@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+
 use crate::util::basic;
 
 pub fn encode_string(to_base64: &str, map: &HashMap<u8, char>) -> String {

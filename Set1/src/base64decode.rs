@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+
 use crate::util::basic;
 
 pub fn run(word: &str, map: &HashMap<char, u8>) -> String {
