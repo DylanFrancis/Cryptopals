@@ -28,6 +28,20 @@ pub fn decimal_to_6bit_binary(num: &u8) -> [u8; 6] {
     arr
 }
 
+pub fn to_decimal_4bit_binary(arr: &[u8; 4]) -> u8 {
+    let mut num: u8 = 0;
+    let mut count: u32 = 4;
+
+    for bit in arr {
+        count -= 1;
+        if *bit == 1 {
+            num += 2_u8.pow(count)
+        }
+    }
+
+    num
+}
+
 pub fn to_decimal_6bit_binary(arr: [u8; 6]) -> u8 {
     let mut num: u8 = 0;
     let mut count: u32 = 6;

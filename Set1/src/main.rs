@@ -1,4 +1,6 @@
 #![feature(type_ascription)]
+#![feature(exclusive_range_pattern)]
+#![feature(assoc_char_funcs)]
 
 use std::collections::HashMap;
 use std::fs::File;
@@ -23,13 +25,16 @@ fn main() {
     if args.len() > 2 {
         match args.get(1).unwrap().as_str() {
             "b64-encode" => {
-                encode(args.split_at(2).1, &bit_to_character_map);
+                encode(args.split_at(2).1, &bit_to_character_map)
             },
             "b64-decode" => {
-                decode(args.split_at(2).1, &character_to_bit_map);
+                decode(args.split_at(2).1, &character_to_bit_map)
             },
             "hex-b64" => {
                 hex_to_b64(args.split_at(2).1, &bit_to_character_map)
+            },
+            "xor-hex" => {
+              xor_hex(args.split_at(2).1)
             },
             &_ => {}
         }
@@ -37,6 +42,20 @@ fn main() {
     else {
         println!("too few arguments");
     }
+}
+
+fn xor_hex(to_xor: &[String]) {
+    if to_xor.len() < 2 {
+        println!("need 2 strings to xor");
+        return;
+    }
+
+    let hex1 = &to_xor[0];
+    let hex2 = &to_xor[1];
+
+    let result = hex::xor(hex1, hex2);
+
+    println!("{}", result);
 }
 
 fn hex_to_b64(to_decode: &[String], map: &HashMap<u8, char>) {
