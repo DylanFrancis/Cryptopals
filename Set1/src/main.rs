@@ -21,10 +21,10 @@ fn main() {
     println!("{:?}", args);
     if args.len() > 2 {
         match args.get(1).unwrap().as_str() {
-            "encode" => {
+            "b64-encode" => {
                 encode(args.split_at(2).1, &bit_to_character_map);
             },
-            "decode" => {
+            "b64-decode" => {
                 decode(args.split_at(2).1, &character_to_bit_map);
             },
             "hex-b64" => {
