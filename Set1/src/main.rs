@@ -10,6 +10,7 @@ mod base64;
 mod base64encode;
 mod base64decode;
 mod hex;
+mod util;
 
 fn main() {
     let indices = indices();
