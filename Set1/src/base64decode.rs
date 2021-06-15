@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::util::basic;
 
 pub fn run(word: &str, map: &HashMap<char, u8>) -> String {
     let bits = get_bits(&word, &map);
@@ -14,7 +15,7 @@ fn decode(bits: Vec<u8>) -> String {
         bit_8[index] = bit;
 
         if index == 7 {
-            let decimal = to_decimal(&bit_8);
+            let decimal = basic::to_decimal_8bit_binary(&bit_8);
             decoded.push(decimal as char);
 
             // reset for next 8 bits
@@ -31,20 +32,6 @@ fn decode(bits: Vec<u8>) -> String {
     decoded
 }
 
-fn to_decimal(arr: &[u8; 8]) -> u8 {
-    let mut num: u8 = 0;
-    let mut count: u32 = 8;
-
-    for bit in arr {
-        count -= 1;
-        if *bit == 1 {
-            num += 2_u8.pow(count)
-        }
-    }
-
-    num
-}
-
 fn get_bits(word: &str, map: &HashMap<char, u8>) -> Vec<u8> {
     let characters = word.as_bytes();
     let mut all_the_bits: Vec<u8> = Vec::new();
@@ -53,7 +40,7 @@ fn get_bits(word: &str, map: &HashMap<char, u8>) -> Vec<u8> {
         // println!("{} -> {}", *x, &(*x as char));
         if *x == 61 { continue }
         let six_bit = map.get(&(*x as char)).unwrap();
-        let six_bit_binary = binary(&six_bit);
+        let six_bit_binary = basic::decimal_to_6bit_binary(&six_bit);
 
         for b in &six_bit_binary {
             all_the_bits.push(*b);
@@ -61,18 +48,4 @@ fn get_bits(word: &str, map: &HashMap<char, u8>) -> Vec<u8> {
     }
 
     all_the_bits
-}
-
-fn binary(num: &u8) -> [u8; 6] {
-    let mut x = *num;
-    let mut arr: [u8; 6] = [0; 6];
-    let mut count = 6;
-
-    while x > 0 {
-        count -= 1;
-        arr[count] = x % 2;
-        x = &x / 2;
-    }
-
-    arr
 }
