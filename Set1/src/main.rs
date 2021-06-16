@@ -36,13 +36,43 @@ fn main() {
                 hex_to_b64(input, &bit_to_character_map)
             },
             "xor-hex" => {
-              xor_hex(input)
+                xor_hex(input)
+            },
+            "hex-decode" => {
+                hex_decode(input)
+            },
+            "hex-decode-file" => {
+                hex_decode_file(input)
             },
             &_ => {}
         }
     }
     else {
         println!("too few arguments");
+    }
+}
+
+fn hex_decode(to_decode: &[String]) {
+    for h in to_decode {
+        let decoded = hex::hex_to_ascii(&h);
+        println!("{} -> {}", h, decoded);
+    }
+}
+
+fn hex_decode_file(file_names: &[String]) {
+    for file in file_names {
+        let file = File::open(file).unwrap();
+        let file_reader = BufReader::new(file);
+
+        for line in file_reader.lines() {
+            match line {
+                Ok(x) => {
+                    let ascii = hex::hex_to_ascii(&x);
+                    println!("{}", ascii);
+                }
+                Err(x) => { panic!("{}", x) }
+            }
+        }
     }
 }
 

@@ -1,5 +1,3 @@
-
-
 pub fn decimal_to_8bit_binary(num: &u8) -> [u8; 8] {
     let mut x = *num;
     let mut arr: [u8; 8] = [0; 8];
