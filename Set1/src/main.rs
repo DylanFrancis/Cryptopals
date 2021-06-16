@@ -23,18 +23,20 @@ fn main() {
 
     println!("{:?}", args);
     if args.len() > 2 {
+        let input = args.split_at(2).1;
+
         match args.get(1).unwrap().as_str() {
             "b64-encode" => {
-                encode(args.split_at(2).1, &bit_to_character_map)
+                encode(input, &bit_to_character_map)
             },
             "b64-decode" => {
-                decode(args.split_at(2).1, &character_to_bit_map)
+                decode(input, &character_to_bit_map)
             },
             "hex-b64" => {
-                hex_to_b64(args.split_at(2).1, &bit_to_character_map)
+                hex_to_b64(input, &bit_to_character_map)
             },
             "xor-hex" => {
-              xor_hex(args.split_at(2).1)
+              xor_hex(input)
             },
             &_ => {}
         }
